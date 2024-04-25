@@ -1,13 +1,22 @@
 import React from "react";
 import { Icon } from "@iconify/react";
-import SuccessModal from "./Modal/Sucessmodal";
-import { useState } from 'react'
-import { Dialog } from '@headlessui/react'
+import { Dialog, Transition } from "@headlessui/react"
+import { Fragment, useState } from "react";
+import SuccessModal from "./Modal";
 
 const App = () => {
-  const [modal, setModal] = useState(false);
-  function handleModal (){
-    setModal(true)
+  const [isOpen, setIsOpen] = useState(false);
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function preventSubmit(e: any) {
+    e.preventDefault();
   }
   return (
     <main>
@@ -15,7 +24,10 @@ const App = () => {
         <div className=" w-[50%] border border-white object-contain rounded ">
           <img src="favicon.ico" alt="Logo " className="w-[20px]" />
 
-          <form className="flex flex-col justify-center items-center w-full h-full space-y-3 border border-gray-200 rounded-lg  bg-gray-100 ml-1">
+          <form
+            onSubmit={(e) => preventSubmit(e)}
+            className="flex flex-col justify-center items-center w-full h-full space-y-3 border border-gray-200 rounded-lg  bg-gray-100 ml-1"
+          >
             <span className="flex flex-col justify-start  items-start">
               <text className="text-gray-800"> Sign In </text>
               <text className="text-gray-500  text-[10px] pt-1 pb-6">
@@ -62,7 +74,10 @@ const App = () => {
                   Forgot Password?
                 </a>
 
-                <button className="bg-blue-500 flex justify-center items-center space-x-2  rounded-md h-[30px] text-white mb-5">
+                <button
+                  onClick={openModal}
+                  className="bg-blue-500 flex justify-center items-center space-x-2  rounded-md h-[30px] text-white mb-5"
+                >
                   Login
                 </button>
                 <p>
@@ -90,13 +105,10 @@ const App = () => {
           </div>
         </div>
       </div>
-      {  modal === true
-      }
-    </main>
 
-    
+      <SuccessModal isOpen={isOpen} onClose={closeModal} />
+    </main>
   );
 };
 
-  
 export default App;
